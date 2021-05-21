@@ -26,7 +26,7 @@ public class CustomBullet : MonoBehaviour
     {
         Setup();
     }
-    // dsds dsds
+
     private void Update()
     {
         if (collisions > maxCollisions) Explode();
