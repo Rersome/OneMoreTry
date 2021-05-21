@@ -37,12 +37,28 @@ public class CustomBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.collider.CompareTag("Bullet")) return;
+
+        collisions++;
+
+        if (collision.collider.CompareTag("Enemy") && explodeOnTouch) Explode();
     }
 
     private void Explode()
     {
+        if (explosion != null) Instantiate(explosion, transform.position, Quaternion.identity);
 
+        Collider[] enemies = Physics.OverlapSphere(transform.position, explosionRange, whatIsEnemies);
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            //enemies[i].GetComponent<ShootingAi>().TakeDamage(explosionDamage);
+        }
+        Invoke("Delay", 0.05f);
+    }
+
+    private void Delay()
+    {
+        Destroy(gameObject);
     }
 
     private void Setup()
@@ -56,4 +72,11 @@ public class CustomBullet : MonoBehaviour
 
         rb.useGravity = useGravity;
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRange);
+    }
+
 }
